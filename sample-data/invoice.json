@@ -1,0 +1,43 @@
+{
+  "exchanged_document_context": {
+    "guideline_specified_document_context_parameter": {
+      "id": { "value": "urn:cen.eu:en16931:2017" }
+    }
+  },
+  "exchanged_document": {
+    "id": { "value": "2026-10042" },
+    "type_code": { "value": "380" },
+    "issue_date_time": {
+      "date_time_string": {
+        "format": "102",
+        "value": "20260909"
+      }
+    }
+  },
+  "supply_chain_trade_transaction": {
+    "included_supply_chain_trade_line_item": [
+      {
+        "associated_document_line_document": {
+          "line_id": { "value": "1" }
+        },
+        "specified_trade_product": {
+          "name": { "value": "Example item" }
+        },
+        "specified_line_trade_delivery": {
+          "billed_quantity": { "value": 1, "unit_code": "C62" }
+        },
+        "specified_line_trade_settlement": {
+          "applicable_trade_tax": {
+            "rate_applicable_percent": { "value": 19.0 }
+          },
+          "specified_trade_settlement_line_monetary_summation": {
+            "line_total_amount": { "value": 100.0 }
+          }
+        }
+      }
+    ],
+    "applicable_header_trade_settlement": {
+      "invoice_currency_code": { "value": "EUR" }
+    }
+  }
+}
