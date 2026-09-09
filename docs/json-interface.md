@@ -46,7 +46,7 @@ These paths appear in [E-Rechnung in FileMaker erstellen](https://www.hagemeiste
 |---|---|
 | `exchanged_document_context.guideline_specified_document_context_parameter.id.value` | Profile / guideline identifier |
 | `exchanged_document.id.value` | Invoice number |
-| `exchanged_document.type_code.value` | Document type code (`380` = commercial invoice) |
+| `exchanged_document.type_code.value` | Document type code, `BT-3` (`380` = commercial invoice) — see [Credit notes and document type codes](#credit-notes-and-document-type-codes) |
 | `exchanged_document.issue_date_time.date_time_string.format` | Date format code (`102` = YYYYMMDD) |
 | `exchanged_document.issue_date_time.date_time_string.value` | Issue date |
 | `supply_chain_trade_transaction.applicable_header_trade_settlement.invoice_currency_code.value` | Invoice currency |
@@ -71,6 +71,55 @@ supply_chain_trade_transaction.included_supply_chain_trade_line_item[$i]
 | `specified_line_trade_settlement.specified_trade_settlement_line_monetary_summation.line_total_amount.value` | Line net amount |
 
 See [../sample-data/invoice.json](../sample-data/invoice.json).
+
+## Credit notes and document type codes
+
+The document type is not determined by positive or negative amounts alone. EN 16931 uses a document type code (`BT-3`) to identify the business document.
+
+Common document type codes include:
+
+| Code | Document |
+|---|---|
+| `380` | Commercial invoice |
+| `381` | Credit note |
+| `384` | Corrected invoice |
+| `389` | Self-billed invoice |
+
+A credit note must therefore be generated explicitly as the appropriate document type. Do not create a normal invoice and merely negate the amounts.
+
+### UBL credit notes use a separate schema
+
+UBL uses different document structures for invoices and credit notes.
+
+An invoice uses:
+
+```xml
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">
+    <cbc:InvoiceTypeCode>380</cbc:InvoiceTypeCode>
+    ...
+    <cac:InvoiceLine>
+        <cbc:InvoicedQuantity>...</cbc:InvoicedQuantity>
+    </cac:InvoiceLine>
+</Invoice>
+```
+
+A credit note uses the separate UBL CreditNote schema:
+
+```xml
+<CreditNote xmlns="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2">
+    <cbc:CreditNoteTypeCode>381</cbc:CreditNoteTypeCode>
+    ...
+    <cac:CreditNoteLine>
+        <cbc:CreditedQuantity>...</cbc:CreditedQuantity>
+    </cac:CreditNoteLine>
+</CreditNote>
+```
+
+Consequently, the JSON-to-XML model selected by the FileMaker solution must match the intended document type. Changing only the document type code is **not sufficient** when switching between a UBL invoice (`Ubl21`) and a UBL credit note (`Ubl21cn`).
+
+CII-based formats such as ZUGFeRD / Factur-X use the same CII document structure for invoices and credit notes; the business document type is identified by the corresponding type code.
+
+The schema endpoint should therefore always be queried for the exact model that is going to be generated.
 
 ## Models differ
 

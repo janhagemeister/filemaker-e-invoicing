@@ -69,9 +69,11 @@ The generator addresses the service by model name:
 | `Facturxen16931` | Factur-X / ZUGFeRD, EN 16931 profile |
 | `Facturxextended` | Factur-X / ZUGFeRD, EXTENDED profile |
 | `Ubl21` | UBL 2.1 Invoice |
-| `Ubl21cn` | UBL 2.1 Credit Note |
+| `Ubl21cn` | UBL 2.1 Credit Note — a separate UBL schema, not a type-code variant |
 | `Cii16buncoupled` | UN/CEFACT Cross Industry Invoice (CII) D16B, uncoupled |
 | `Cii16bcoupled` | UN/CEFACT CII D16B, coupled |
+
+The model must match the intended document type. UBL uses separate schemas for invoices and credit notes, so switching between them means switching model, not just changing the document type code `BT-3`. See [docs/json-interface.md](docs/json-interface.md#credit-notes-and-document-type-codes).
 
 `EXTENDED` is not `EN16931` plus a few extra fields. Repeatable elements such as `applicable_trade_tax`, `defined_trade_contact`, and `specified_trade_payment_terms` differ between the profiles, which is why `Facturxextended` has its own endpoint.
 

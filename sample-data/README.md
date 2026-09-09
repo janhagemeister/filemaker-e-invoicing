@@ -1,5 +1,11 @@
 # Sample data
 
+| File | Purpose |
+|---|---|
+| `invoice.json` | Commercial invoice (`BT-3` = `380`) |
+| `credit-note.json` | Credit note (`BT-3` = `381`) |
+
+
 ## `invoice.json`
 
 An **excerpt** of the invoice JSON that the generator posts to
@@ -14,6 +20,16 @@ It contains only the paths shown in
 This is **not a complete EN 16931 invoice**. It is missing, among other things, seller and buyer, tax breakdown, totals, and payment terms.
 
 The full path list and JSON type rules: [../docs/json-interface.md](../docs/json-interface.md).
+
+## `credit-note.json`
+
+The same CII structure as `invoice.json`, with the document type code set to `381`.
+
+A credit note is identified by its document type code, not by negative amounts. Do not build one by negating an invoice.
+
+This matters for model selection: CII formats such as ZUGFeRD / Factur-X use the same document structure for both, so the type code is the difference. UBL does not — it has a separate `CreditNote` schema, so a UBL credit note requires the `Ubl21cn` model rather than `Ubl21`. Changing the type code alone is not enough.
+
+See [Credit notes and document type codes](../docs/json-interface.md#credit-notes-and-document-type-codes).
 
 ## The schema endpoint is authoritative
 
